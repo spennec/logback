@@ -77,9 +77,9 @@ import java.util.List;
  * <pre>
  *    &lt;configuration&gt;
  *      &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
- *        &lt;layout class=&quot;ch.qos.logback.access.PatternLayout&quot;&gt;
- *          &lt;param name=&quot;Pattern&quot; value=&quot;%date %server %remoteIP %clientHost %user %requestURL&quot; /&gt;
- *        &lt;/layout&gt;
+ *        &lt;encoder class=&quot;ch.qos.logback.access.PatternLayoutEncoder&quot;&gt;
+ *          &lt;pattern&gt;%date %server %remoteIP %clientHost %user %requestURL&lt;/pattern&gt;
+ *        &lt;/encoder&gt;
  *      &lt;/appender&gt;
  *
  *      &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;
@@ -91,9 +91,9 @@ import java.util.List;
  * <pre>
  *    &lt;configuration&gt;
  *      &lt;appender name=&quot;SMTP&quot; class=&quot;ch.qos.logback.access.net.SMTPAppender&quot;&gt;
- *        &lt;layout class=&quot;ch.qos.logback.access.PatternLayout&quot;&gt;
- *          &lt;param name=&quot;pattern&quot; value=&quot;%remoteIP [%date] %requestURL %statusCode %bytesSent&quot; /&gt;
- *        &lt;/layout&gt;
+ *        &lt;encoder class=&quot;ch.qos.logback.access.PatternLayoutEncoder&quot;&gt;
+ *          &lt;pattern&gt;%remoteIP [%date] %requestURL %statusCode %bytesSent&lt;/pattern&gt;
+ *        &lt;/encoder&gt;
  *        &lt;param name=&quot;From&quot; value=&quot;sender@domaine.org&quot; /&gt;
  *        &lt;param name=&quot;SMTPHost&quot; value=&quot;mail.domain.org&quot; /&gt;
  *         &lt;param name=&quot;Subject&quot; value=&quot;Last Event: %statusCode %requestURL&quot; /&gt;
@@ -198,7 +198,7 @@ public class RequestLogImpl extends ContextBase implements RequestLog,
   }
 
   public void addLifeCycleListener(Listener listener) {
-    //no support for listeners yet
+    //no support for listeners yet       s
   }
 
   public void removeLifeCycleListener(Listener listener) {

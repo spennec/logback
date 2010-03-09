@@ -13,15 +13,6 @@
  */
 package ch.qos.logback.access.jetty;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import org.mortbay.jetty.Request;
-import org.mortbay.jetty.RequestLog;
-import org.mortbay.jetty.Response;
-
 import ch.qos.logback.access.joran.JoranConfigurator;
 import ch.qos.logback.access.spi.AccessEvent;
 import ch.qos.logback.core.Appender;
@@ -29,15 +20,19 @@ import ch.qos.logback.core.ContextBase;
 import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.joran.spi.JoranException;
-import ch.qos.logback.core.spi.AppenderAttachable;
-import ch.qos.logback.core.spi.AppenderAttachableImpl;
-import ch.qos.logback.core.spi.FilterAttachable;
-import ch.qos.logback.core.spi.FilterAttachableImpl;
-import ch.qos.logback.core.spi.FilterReply;
+import ch.qos.logback.core.spi.*;
 import ch.qos.logback.core.status.ErrorStatus;
 import ch.qos.logback.core.status.InfoStatus;
 import ch.qos.logback.core.status.WarnStatus;
 import ch.qos.logback.core.util.OptionHelper;
+import org.mortbay.jetty.Request;
+import org.mortbay.jetty.RequestLog;
+import org.mortbay.jetty.Response;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class is logback's implementation of jetty's RequestLog interface. <p>
@@ -76,31 +71,31 @@ import ch.qos.logback.core.util.OptionHelper;
  * <p> Here is a sample logback-access.xml file that can be used right away:
  * 
  * <pre>
- *    &lt;configuration&gt; 
- *      &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt; 
- *        &lt;layout class=&quot;ch.qos.logback.access.PatternLayout&quot;&gt; 
- *          &lt;param name=&quot;Pattern&quot; value=&quot;%date %server %remoteIP %clientHost %user %requestURL&quot; /&gt;
- *        &lt;/layout&gt; 
- *      &lt;/appender&gt; 
- *      
- *      &lt;appender-ref ref=&quot;STDOUT&quot; /&gt; 
+ *    &lt;configuration&gt;
+ *      &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+ *        &lt;encoder class=&quot;ch.qos.logback.access.PatternLayoutEncoder&quot;&gt;
+ *          &lt;pattern&gt;%date %server %remoteIP %clientHost %user %requestURL&lt;/pattern&gt;
+ *        &lt;/encoder&gt;
+ *      &lt;/appender&gt;
+ *
+ *      &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;
  *    &lt;/configuration&gt;
  * </pre>
- * 
+ *
  * <p> Another configuration file, using SMTPAppender, could be:
- * 
+ *
  * <pre>
- *    &lt;configuration&gt; 
+ *    &lt;configuration&gt;
  *      &lt;appender name=&quot;SMTP&quot; class=&quot;ch.qos.logback.access.net.SMTPAppender&quot;&gt;
- *        &lt;layout class=&quot;ch.qos.logback.access.PatternLayout&quot;&gt;
- *          &lt;param name=&quot;pattern&quot; value=&quot;%remoteIP [%date] %requestURL %statusCode %bytesSent&quot; /&gt;
- *        &lt;/layout&gt;
+ *        &lt;encoder class=&quot;ch.qos.logback.access.PatternLayoutEncoder&quot;&gt;
+ *          &lt;pattern&gt;%remoteIP [%date] %requestURL %statusCode %bytesSent&lt;/pattern&gt;
+ *        &lt;/encoder&gt;
  *        &lt;param name=&quot;From&quot; value=&quot;sender@domaine.org&quot; /&gt;
  *        &lt;param name=&quot;SMTPHost&quot; value=&quot;mail.domain.org&quot; /&gt;
  *         &lt;param name=&quot;Subject&quot; value=&quot;Last Event: %statusCode %requestURL&quot; /&gt;
  *         &lt;param name=&quot;To&quot; value=&quot;server_admin@domain.org&quot; /&gt;
  *      &lt;/appender&gt;
- *      &lt;appender-ref ref=&quot;SMTP&quot; /&gt; 
+ *      &lt;appender-ref ref=&quot;SMTP&quot; /&gt;
  *    &lt;/configuration&gt;
  * </pre>
  * 
